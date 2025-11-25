@@ -1,4 +1,4 @@
-package com.fth.utile;
+package com.fth.utils;
 
 /**
  * @author 虎哥

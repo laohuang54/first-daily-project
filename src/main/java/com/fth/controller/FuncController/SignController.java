@@ -1,4 +1,4 @@
-package com.fth.controller.user;
+package com.fth.controller.FuncController;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;

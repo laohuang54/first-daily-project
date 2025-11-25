@@ -1,1 +1,61 @@
-spring.application.name=fth
+spring:
+  application:
+    name: fth
+
+  #配置数据库连接信息：
+  datasource:
+    url: jdbc:mysql://localhost:3306/daliy
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: Fth419516.
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
+#      password: 123456
+      database: 0
+server:
+  port: 8080  # 把 8080 改成 8080
+
+
+
+#    #MyBatis配置：
+#mybatis-plus:
+#  type-aliases-package: com.fth.pojo # 指定实体类所在的包
+#  mapper-locations: classpath*:/mapper/*.xml # 指定Mapper XML文件所在的路径
+#  configuration:
+#    map-underscore-to-camel-case: true
+#mybatis:
+#  configuration:
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+#    map-underscore-to-camel-case: true
+mybatis:
+  #mapper配置文件
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.fth.pojo
+  configuration:
+    #开启驼峰命名
+    map-underscore-to-camel-case: true
+fth:
+  jwt:
+    # JWT密钥必须至少32字节（256位）才能满足HS256算法的安全要求
+    user-secret-key: dailyUserSecretKeyForJWTTokenGeneration2024Secure
+    user-ttl: 7200000
+    user-token-name: authentication
+
+    admin-secret-key: fthcastAdminSecretKeyForJWTTokenGeneration2024Secure
+    # 设置jwt过期时间
+    admin-ttl: 7200000
+    # 设置前端传递过来的令牌名称
+    admin-token-name: token
+
+  alioss:
+      endpoint: https://oss-cn-beijing.aliyuncs.com
+      bucket-name: first-project1
+      access-key-id:
+      access-key-secret:
+
+
+
+

@@ -1,7 +1,7 @@
-package com.sky.config;
+package com.fth.config;
 
-import com.sky.properties.AliOssProperties;
-import com.sky.utils.AliOssUtil;
+import com.fth.properties.AliOssProperties;
+import com.fth.utils.AliOssUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
