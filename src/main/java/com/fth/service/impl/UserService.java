@@ -32,5 +32,6 @@ public class UserService implements IUserService {
     @Override
     public Result register(User user) {
         userMapper.saveUser(user);
+        return Result.ok();
     }
 }

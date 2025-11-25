@@ -2,7 +2,25 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.fth.mapper.UserMapper">
 
-    <insert id="saveUser">
-
-    </insert>
-</mapper>
+    <insert id="saveUser" parameterType="com.fth.pojo.User">
+        INSERT INTO user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <!-- 必填字段：username、password -->
+            <if test="username != null and username != ''">username,</if>
+            <if test="password != null and password != ''">password,</if>
+            <!-- 可选字段：nickname（非空则插入） -->
+            <if test="nickname != null and nickname != ''">nickname,</if>
+            <!-- 可选字段：avatar（非空则插入） -->
+            <if test="avatar != null and avatar != ''">avatar,</if>
+            <!-- 可选字段：sex（允许为null，传null也插入） -->
+            <if test="sex != null">sex,</if>
+            <!-- create_time 用数据库默认值，不手动插入 -->
+        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+            <if test="username != null and username != ''">#{username},</if>
+            <if test="password != null and password != ''">#{password},</if>
+            <if test="nickname != null and nickname != ''">#{nickname},</if>
+            <if test="avatar != null and avatar != ''">#{avatar},</if>
+            <if test="sex != null">#{sex},</if>
+        </trim>
+    </insert></mapper>
