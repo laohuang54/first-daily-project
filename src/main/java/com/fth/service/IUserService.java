@@ -1,9 +1,13 @@
 package com.fth.service;
 
-import com.baomidou.mybatisplus.extension.service.IService;
+import com.fth.dto.LoginDTO;
+import com.fth.dto.Result;
 import com.fth.pojo.User;
-import org.springframework.stereotype.Service;
 
 
-public interface IUserService extends IService<User> {
+public interface IUserService {
+
+    User login(LoginDTO loginDTO);
+
+    Result register(User user);
 }

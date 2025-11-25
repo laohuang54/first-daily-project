@@ -5,8 +5,12 @@ import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+import static com.fth.constant.JwtConstant.USER_ID;
+
+@Component
 public class UserInterceptor implements HandlerInterceptor {
     @Autowired
     private JwtProperty jwtProperty;
@@ -19,7 +23,7 @@ public class UserInterceptor implements HandlerInterceptor {
         }
         try{
             Claims claims = JwtUtil.parseJWT(jwtProperty.getUserSecretKey(), token);
-            Long userId=Long.valueOf(claims.get("userId").toString());
+            Long userId=Long.valueOf(claims.get(USER_ID).toString());
             UserHolder.saveUser(userId);
         }catch (Exception e){
             response.setStatus(401);
