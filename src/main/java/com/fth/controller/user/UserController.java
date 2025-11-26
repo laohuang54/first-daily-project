@@ -46,20 +46,18 @@ public class UserController {
 
     @PostMapping("/register")
     public Result register(@RequestBody User user) {
+        log.info("用户注册：{}",user);
         return userService.register(user);
     }
-
     @PostMapping("/upload")
     public Result upload(MultipartFile file){
         log.info("文件上传：{}",file);
         try {
             //原始文件名
             String originalFilename = file.getOriginalFilename();
-            //截取原始文件名的后缀   dfdfdf.png
             String extension = originalFilename.substring(originalFilename.lastIndexOf("."));
             //构造新文件名称
             String objectName = UUID.randomUUID().toString() + extension;
-
             //文件的请求路径
             String filePath = aliOssUtil.upload(file.getBytes(), objectName);
             return Result.ok(filePath);
@@ -69,6 +67,4 @@ public class UserController {
 
         return Result.fail(UPLOAD_ERROR);
     }
-
-
 }

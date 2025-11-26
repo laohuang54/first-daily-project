@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 public class UserDTO {
     private String username;
 
-    private String nickname;
+//    private String nickname;
 
     private String sex;
 

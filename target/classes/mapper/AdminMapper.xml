@@ -15,7 +15,6 @@
         select * from user
         <where>
             <if test="username != null and username != ''"> and username like concat('%',#{username},'%')</if>
-            <if test="nickname != null and nickname != ''"> and nickname like concat('%',#{nickname},'%')</if>
             <if test="sex != null and sex != ''"> and sex = #{sex}</if>
             <if test="status != null and status != ''"> and status = #{status}</if>
             <if test="start!=null and start!=''"> and create_time >= #{start}</if>

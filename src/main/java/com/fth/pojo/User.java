@@ -17,11 +17,11 @@ public class User {
 
     private String password;
 
-    private Integer sex; // 1:男  0:
+    private Integer sex; // 1:男  0:女
 
     private Integer status;
 
-    private String nickname;
+//    private String nickname;
 
     private String avatar;
 
