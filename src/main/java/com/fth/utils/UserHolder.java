@@ -5,8 +5,8 @@ import com.fth.pojo.User;
 public class UserHolder {
     private static final ThreadLocal<Long> tl = new ThreadLocal<>();
 
-    public  static Long getUser(){
-        return tl.get();
+    public  static Integer getUser(){
+        return Math.toIntExact(tl.get());
     }
     public static void saveUser(Long userId){
         tl.set(userId);

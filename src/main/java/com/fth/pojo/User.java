@@ -19,7 +19,7 @@ public class User {
 
     private Integer sex; // 1:男  0:女
 
-    private Integer status;
+    private Integer status; // 1:正常 0:封禁
 
 //    private String nickname;
 

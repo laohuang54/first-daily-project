@@ -1,9 +1,6 @@
 package com.fth.controller.admin;
 
-import com.fth.dto.BanDTO;
-import com.fth.dto.LoginDTO;
-import com.fth.dto.Result;
-import com.fth.dto.UserDTO;
+import com.fth.dto.*;
 import com.fth.pojo.Admin;
 import com.fth.pojo.User;
 import com.fth.properties.JwtProperty;
@@ -44,20 +41,40 @@ public class AdminController {
         login.setToken(jwt);
         return Result.ok(login);
     }
+/**
+ * 获取用户列表接口
+ * 通过GET请求方式访问/users路径，接收UserDTO参数并返回用户列表
+ *
+ * @param userDTO 用户数据传输对象，包含查询条件
+ * @return 返回Result对象，其中包含用户列表
+ */
     @GetMapping("/users")
-    public Result getUser(UserDTO userDTO){
-        PageInfo<User> user = adminService.getUser(userDTO);
-        return Result.ok(user);
+    public Result getUser(UserDTO userDTO){  // 定义获取用户列表的方法，接收UserDTO类型的参数
+        List<User> user = adminService.getUser(userDTO);  // 调用服务层方法获取用户列表
+        return Result.ok(user);  // 返回成功响应，包含用户列表
     }
+/**
+ * 根据用户ID获取用户信息接口
+ * @param id 用户ID，通过路径变量传递
+ * @return 返回一个Result对象，包含用户信息
+ */
     @GetMapping("/users/{id}")
-    public Result getUser(@PathVariable Long id){
-        User user = adminService.getUserDetail(id);
-        return Result.ok(user);
+    public Result getUser(@PathVariable Long id){  // 使用@PathVariable注解获取路径中的id参数
+        User user = adminService.getUserDetail(id);  // 调用服务层方法获取用户详细信息
+        return Result.ok(user);  // 返回成功响应，包含用户信息
     }
 
-    @PutMapping("/users/ban")
-    public Result banUser(BanDTO banDTO){
-        adminService.banUser(banDTO);
-        return Result.ok();
+/**
+ * 禁用用户接口
+ * 通过用户ID禁用指定用户
+ *
+ * @param banDTO 包含被禁用用户ID的DTO对象
+ * @return 返回操作结果，成功时返回ok状态
+ */
+    @PutMapping("/users/ban")  // 定义HTTP PUT请求映射，路径为/users/ban
+
+    public Result banUser(@RequestBody BanDTO banDTO){  // 方法：banUser，接收BanDTO类型参数
+        adminService.banUser(banDTO);  // 调用adminService的banUser方法执行禁用操作
+        return Result.ok();  // 返回操作成功的结果
     }
 }

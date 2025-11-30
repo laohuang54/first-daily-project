@@ -17,8 +17,6 @@
             <if test="username != null and username != ''"> and username like concat('%',#{username},'%')</if>
             <if test="sex != null and sex != ''"> and sex = #{sex}</if>
             <if test="status != null and status != ''"> and status = #{status}</if>
-            <if test="start!=null and start!=''"> and create_time >= #{start}</if>
-            <if test="end!=null and end!=''"> and create_time &lt;= #{end}</if>
         </where>
     </select>
     <select id="getUserList" resultType="com.fth.pojo.User" parameterType="com.fth.dto.UserDTO">

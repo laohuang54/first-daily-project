@@ -7,4 +7,5 @@ public class UserConstant {
     public static final Integer NORMAL=1;
     public static final String UPLOAD_ERROR="文件上传失败";
     public static final String LOGIN_ERROR="用户名或密码错误";
+    public static final String ESSAY_ERROR="文章发布失败";
 }

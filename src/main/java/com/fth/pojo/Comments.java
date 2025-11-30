@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class comments {
+public class Comments {
     private Integer id;
 
     private Integer essayId;

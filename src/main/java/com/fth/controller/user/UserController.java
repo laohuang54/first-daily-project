@@ -1,7 +1,9 @@
 package com.fth.controller.user;
 
 import com.fth.dto.LoginDTO;
+import com.fth.dto.RegisterDTO;
 import com.fth.dto.Result;
+import com.fth.dto.UserDTO;
 import com.fth.pojo.User;
 import com.fth.properties.JwtProperty;
 import com.fth.service.IUserService;
@@ -12,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -45,26 +48,47 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public Result register(@RequestBody User user) {
-        log.info("用户注册：{}",user);
-        return userService.register(user);
-    }
-    @PostMapping("/upload")
-    public Result upload(MultipartFile file){
-        log.info("文件上传：{}",file);
+    public Result register(@ModelAttribute RegisterDTO userDTO) {
+        log.info("用户注册：{}", userDTO);
         try {
-            //原始文件名
-            String originalFilename = file.getOriginalFilename();
-            String extension = originalFilename.substring(originalFilename.lastIndexOf("."));
-            //构造新文件名称
-            String objectName = UUID.randomUUID().toString() + extension;
-            //文件的请求路径
-            String filePath = aliOssUtil.upload(file.getBytes(), objectName);
-            return Result.ok(filePath);
-        } catch (IOException e) {
-            log.error("文件上传失败：{}", e);
-        }
+            String avatarUrl = null;
+            // 1. 获取前端传递的头像文件（从DTO中取出MultipartFile）
+            MultipartFile avatarFile = userDTO.getAvatar();
 
-        return Result.fail(UPLOAD_ERROR);
+            // 2. 处理文件上传（有头像且文件有效才上传）
+            if (avatarFile != null && !avatarFile.isEmpty()) {
+                // 2.1 提取文件后缀（保持你的原有逻辑）
+                String originalFilename = avatarFile.getOriginalFilename();
+                String extension = originalFilename.substring(originalFilename.lastIndexOf("."));
+                // 2.2 构造OSS中的唯一文件名（避免重名，保持原有逻辑）
+                String objectName = "user-avatar/" + UUID.randomUUID().toString() + extension;
+
+                // 2.3 调用改造后的AliOssUtil：传递 MultipartFile 和 objectName（核心修改）
+                avatarUrl = aliOssUtil.upload(avatarFile.getBytes(), objectName);
+
+                // 2.4 修复日志：打印实际的上传URL（原代码漏传参数）
+                log.info("文件上传成功，URL：{}", avatarUrl);
+            }
+
+            // 3. 传递DTO和头像URL给Service层（逻辑不变）
+            return userService.registerWithAvatar(userDTO, avatarUrl);
+
+        } catch (IllegalArgumentException e) {
+            // 捕获工具类中的参数校验错误（如文件为空、格式不支持、配置缺失）
+            log.error("注册失败：{}", e.getMessage());
+            return Result.fail(e.getMessage());
+        } catch (com.aliyun.oss.OSSException e) {
+            // 捕获OSS服务端错误（如AK错误、Bucket不存在、权限不足）
+            log.error("OSS上传失败：错误码={}, 错误信息={}", e.getErrorCode(), e.getErrorMessage());
+            return Result.fail(UPLOAD_ERROR + "：OSS服务异常");
+        } catch (com.aliyun.oss.ClientException e) {
+            // 捕获OSS客户端错误（如网络不通、Endpoint错误）
+            log.error("OSS上传失败：客户端错误={}", e.getMessage());
+            return Result.fail(UPLOAD_ERROR + "：网络异常，请重试");
+        } catch (Exception e) {
+            // 捕获其他未知错误（如文件转字节流失败）
+            log.error("注册失败：", e);
+            return Result.fail("注册失败，请联系管理员");
+        }
     }
 }

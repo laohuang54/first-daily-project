@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class essay {
+public class Essay {
     private Integer id;
 
     private Integer userId;

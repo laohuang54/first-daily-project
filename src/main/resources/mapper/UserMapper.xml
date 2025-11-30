@@ -12,11 +12,14 @@
             <if test="avatar != null and avatar != ''">avatar,</if>
             <!-- 可选字段：sex（允许为null，传null也插入） -->
             <if test="sex != null">sex,</if>
+            create_time
         </trim>
         <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
             <if test="username != null and username != ''">#{username},</if>
             <if test="password != null and password != ''">#{password},</if>
             <if test="avatar != null and avatar != ''">#{avatar},</if>
             <if test="sex != null">#{sex},</if>
+            now()
         </trim>
-    </insert></mapper>
+    </insert>
+</mapper>

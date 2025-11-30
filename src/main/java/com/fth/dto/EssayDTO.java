@@ -8,9 +8,9 @@ import org.springframework.web.multipart.MultipartFile;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDTO {
-    private String username;
-    private String password;
-    private Integer sex;
-    private Integer status;
+public class EssayDTO {
+    private Integer id;
+    private String title;
+    private String content;
+    private MultipartFile img;
 }

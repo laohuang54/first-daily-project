@@ -2,9 +2,11 @@ package com.fth.mapper;
 
 import com.fth.dto.BanDTO;
 import com.fth.dto.LoginDTO;
+import com.fth.dto.PageResult;
 import com.fth.dto.UserDTO;
 import com.fth.pojo.Admin;
 import com.fth.pojo.User;
+import com.github.pagehelper.Page;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
