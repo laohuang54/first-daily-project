@@ -1,0 +1,44 @@
+server:
+  port: 8081
+spring:
+  application:
+    name: fth
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/daliy?useSSL=false&serverTimezone=UTC
+    username: root
+    password: Fth419516.
+  jackson:
+    default-property-inclusion: non_null # JSON处理时忽略非空字段
+  data:
+    redis:
+      host: 6379
+      port: 6379
+      database: 0
+mybatis:
+  #mapper配置文件
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.sky.entity
+  configuration:
+    #开启驼峰命名
+    map-underscore-to-camel-case: true
+logging:
+  level:
+    com.fth: debug
+fth:
+  jwt:
+    # 管理员端签名密钥（48位，包含大小写、数字、特殊符号）
+    admin-secret-key: "ItC@st2024$%^AdminSignKey_7890qwertyuiopasdfghjkl"
+    # 管理员token过期时间（7200000毫秒 = 2小时，保持不变）
+    admin-ttl: 7200000
+    # 管理员端令牌名称
+    admin-token-name: token
+
+    # 用户端签名密钥（48位，与管理员端不同，提高安全性）
+    user-secret-key: "Fth@User2024&*()SignKey_1234zxcvbnm,./;lkjhgfdsa"
+    # 用户token过期时间（7200000毫秒 = 2小时，保持不变）
+    user-ttl: 7200000
+    # 用户端令牌名称
+    user-token-name: authentication
+  pattern:
+    dateformat: mm:ss.SSS
