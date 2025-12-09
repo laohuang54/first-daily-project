@@ -22,4 +22,10 @@ public class CommonController {
     public Result signIn() {
         return signService.sign();
     }
+
+    @GetMapping("/sign/showother")
+    public Result showSign(String time) { //time ：几几年几月份
+        //TODO 显示其他年/月份的签到记录
+        return signService.showSign(time);
+    }
 }

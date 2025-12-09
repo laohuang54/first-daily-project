@@ -1,6 +1,5 @@
 package com.fth.vo;
 
-import com.fth.pojo.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SignVO {
+public class SignVO{
     private Integer id;
 
     private Long signedCount; // 当月已签到天数

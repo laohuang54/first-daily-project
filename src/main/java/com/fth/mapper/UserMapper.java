@@ -26,4 +26,6 @@ public interface UserMapper{
 
     @Delete("delete from user where id=#{id}")
     void deleteUser(Integer id);
+    @Update("update user set score = score + #{signScore} where id = #{userId}")
+    void updatescore(Integer userId, Integer signScore);
 }

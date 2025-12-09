@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fth.mapper.ShopMapper">
+
+    <update id="update" parameterType="com.fth.pojo.Shop">
+        update shop
+        <set>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="price != null and price != ''">price = #{price},</if>
+            <if test="description != null and description != ''">description = #{description},</if>
+            <if test="img != null and img != ''">img = #{img},</if>
+            <if test="status != null and status != ''">status = #{status},</if>
+            <if test="stock != null and stock != ''">stock = #{stock},</if>
+        </set>
+        where id = #{id}
+    </update>
+</mapper>

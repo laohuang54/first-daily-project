@@ -12,6 +12,5 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserVO extends User {
-
     private List<Essay> essays;
 }

@@ -16,7 +16,9 @@ public class ShopController {
     @GetMapping("/show") //展示商品
     public Result show(){
         //TODO 展示商品
-
+        shopService.show();
         return Result.ok();
     }
+
+
 }

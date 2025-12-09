@@ -1,20 +1,23 @@
 package com.fth.service.impl;
 
 import com.fth.dto.Result;
+import com.fth.mapper.UserMapper;
 import com.fth.service.ISignService;
 import com.fth.utils.UserHolder;
 import com.fth.vo.SignVO;
 import lombok.extern.slf4j.Slf4j;
+import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
-import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
+import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.fth.constant.KeysConstant.SIGN_KEY;
 
@@ -23,6 +26,11 @@ import static com.fth.constant.KeysConstant.SIGN_KEY;
 public class SignService implements ISignService {
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private UserMapper userMapper;
+    private final Integer SIGN_SCORE=100;
 
     @Override
     public Result sign() {
@@ -60,7 +68,24 @@ public class SignService implements ISignService {
         signVO.setId(userId);
         signVO.setSignedCount(signedCount);
         signVO.setContinueSignCount(continueSignedCount);
+        userMapper.updatescore(userId, SIGN_SCORE); //签到加积分
         return Result.ok(signVO);
+    }
+
+    @Override
+    public Result showSign(String time) {
+        Integer userId = UserHolder.getUserId();
+//        String signKey = SIGN_KEY + userId + ":" + yearMonth;
+        String key = SIGN_KEY + userId + ":" + time;
+        int year = Integer.parseInt(time.substring(0, 4));
+        int month = Integer.parseInt(time.substring(4));
+        int daysOfMonth = YearMonth.of(year, month).lengthOfMonth();
+        List<Boolean> list = new ArrayList<>();
+        int i = 0;
+        for (; i < daysOfMonth; i++) {
+            list.add(stringRedisTemplate.opsForValue().getBit(key, i));
+        }
+        return Result.ok(list);
     }
 
     private Long getSignedCount(String key) { // 当月已签到天数

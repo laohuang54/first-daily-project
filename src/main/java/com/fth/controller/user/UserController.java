@@ -40,7 +40,7 @@ public class UserController {
     @Autowired
     private AliOssUtil aliOssUtil;
 
-    @DeleteMapping("/deleteuser/{id}")
+    @DeleteMapping("/deleteuser/{id}") //注销账号
     public Result deleteUser(Integer id) {
         return userService.deleteUser(id);
     }
