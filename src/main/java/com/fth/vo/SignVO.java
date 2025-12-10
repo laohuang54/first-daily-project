@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SignVO{
-    private Integer id;
+    private Integer id; // 用户id
 
     private Long signedCount; // 当月已签到天数
 

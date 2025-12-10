@@ -74,6 +74,7 @@ public class SignService implements ISignService {
 
     @Override
     public Result showSign(String time) {
+        log.info("展示其他时间签到"+time);
         Integer userId = UserHolder.getUserId();
 //        String signKey = SIGN_KEY + userId + ":" + yearMonth;
         String key = SIGN_KEY + userId + ":" + time;

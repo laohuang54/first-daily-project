@@ -7,8 +7,14 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CommentsDTO {
-    private Integer essayId;
+public class ShopDTO {
+    private Integer id;
 
-    private String content;
+    private String name;
+
+    private Integer price;
+
+    private Integer stock;
+
+    private Integer status;
 }

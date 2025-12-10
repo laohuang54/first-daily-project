@@ -5,8 +5,7 @@ import com.fth.pojo.Essay;
 import com.fth.pojo.User;
 import com.fth.properties.JwtProperty;
 import com.fth.service.IUserService;
-import com.fth.service.impl.EssayService;
-import com.fth.service.impl.UserService;
+import com.fth.service.impl.*;
 import com.fth.utils.AliOssUtil;
 import com.fth.utils.JwtUtil;
 import com.fth.utils.UserHolder;
@@ -39,6 +38,55 @@ public class UserController {
     private JwtProperty jwtProperty;
     @Autowired
     private AliOssUtil aliOssUtil;
+    @Autowired
+    private SignService signService;
+    @Autowired
+    private CommentsService commentsService;
+
+    @Autowired
+    private ShopService shopService;
+
+
+
+    @PutMapping("/seckill") //用户抢购秒杀商品
+    public Result seckill(Integer id){
+        return shopService.seckill(id);
+    }
+
+    @PutMapping("/sell")
+    public Result sell(Integer id){ //用户购买普通商品
+        return shopService.sell(id);
+    }
+
+    @GetMapping("/show") //展示商品
+    public Result show(){
+        //TODO 展示商品
+        shopService.show();
+        return Result.ok();
+    }
+
+    @GetMapping("/comments/show/{essay_id}")
+    public Result showComments(@PathVariable Integer essay_id){
+        return commentsService.show(essay_id);
+    }
+
+    // 发表评论
+    @PostMapping("/comments/add")
+    public Result addComments(@RequestBody CommentsDTO commentsDTO) {
+        // TODO 实现多级评论功能
+        return commentsService.add(commentsDTO);
+    }
+
+    @PutMapping("/signin") //用户签到
+    public Result signIn() {
+        return signService.sign();
+    }
+
+    @GetMapping("/sign/show")
+    public Result showSign(String time) { //time ：几几年几月份
+        //TODO 显示其他年/月份的签到记录
+        return signService.showSign(time);
+    }
 
     @DeleteMapping("/deleteuser/{id}") //注销账号
     public Result deleteUser(Integer id) {

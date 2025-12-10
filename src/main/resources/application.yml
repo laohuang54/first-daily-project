@@ -5,22 +5,32 @@ server:
       charset: UTF-8
       enabled: true
       force: true
+
 spring:
+  profiles:
+    active: dev
   application:
     name: fth
   datasource:
-    driver-class-name: ${driver_class_name}
-    url: ${url}
-    username: ${username}
-    password: ${password}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/daliy?useSSL=false&serverTimezone=UTC&useUnicode=true&characterEncoding=UTF-8&allowPublicKeyRetrieval=true #${url}
+    username: root   #${username}
+    password: Fth419516. #${password}
   jackson:
     default-property-inclusion: non_null # JSON处理时忽略非空字段
   data:
     redis:
       host: ${redis_host}
       port: ${redis_port}
-      password: ${redis_password}
+#      password: ${redis_password}
       database: ${redis_database}
+  servlet:
+    multipart:
+      enabled: true
+      # 单个文件最大大小（例如设置为 50MB）
+      max-file-size: 50MB
+      # 多文件上传时总请求大小（例如设置为 50MB）
+      max-request-size: 50MB
 
   mvc:
     format:
@@ -42,13 +52,13 @@ fth:
     # 管理员端签名密钥（48位，包含大小写、数字、特殊符号）
     admin-secret-key: "ItC@st2024$%^AdminSignKey_7890qwertyuiopasdfghjkl"
     # 管理员token过期时间（7200000毫秒 = 2小时，保持不变）
-    admin-ttl: ${ttl}
+    admin-ttl: 7200000
     # 管理员端令牌名称
     admin-token-name: token
 
     # 用户端签名密钥（48位，与管理员端不同，提高安全性）
     user-secret-key: "Fth@User2024&*()SignKey_1234zxcvbnm,./;lkjhgfdsa"
     # 用户token过期时间（7200000毫秒 = 2小时，保持不变）
-    user-ttl: ${ttl}
+    user-ttl: 7200000
     # 用户端令牌名称
     user-token-name: token

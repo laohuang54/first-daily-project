@@ -2,10 +2,12 @@ package com.fth.controller.admin;
 
 import com.fth.dto.*;
 import com.fth.pojo.Admin;
+import com.fth.pojo.Shop;
 import com.fth.pojo.User;
 import com.fth.properties.JwtProperty;
 import com.fth.service.IAdminService;
 import com.fth.service.impl.EssayService;
+import com.fth.service.impl.ShopService;
 import com.fth.utils.JwtUtil;
 import com.fth.vo.UserVO;
 import com.github.pagehelper.PageInfo;
@@ -31,7 +33,16 @@ public class AdminController {
     @Autowired
     private EssayService essayService;
 
-    @DeleteMapping("/delete/{id}")
+
+    @Autowired
+    private ShopService shopService;
+    @PutMapping("/shop/update")
+    public Result update(@RequestBody Shop shop){
+        shopService.update(shop);
+        return Result.ok();
+    }
+
+    @DeleteMapping("/delete/{id}") //删除用户文章
     public Result deleteEssayAdmin(@PathVariable Integer id) {
         essayService.deleteEssayAdmin(id);
         return Result.ok();

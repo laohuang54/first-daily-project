@@ -25,4 +25,8 @@ public class Shop {
     private Integer price; //商品价格
 
     private Integer stock; //商品库存
+
+    private Integer status; //商品状态
+
+    private Integer version=0;
 }
