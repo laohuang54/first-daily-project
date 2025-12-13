@@ -7,4 +7,6 @@ public interface ICommentsService {
     Result add(CommentsDTO commentsDTO);
 
     Result show(Integer essayId);
+
+    Result likeComments(Integer id);
 }

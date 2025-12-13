@@ -13,9 +13,13 @@ spring:
     name: fth
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/daliy?useSSL=false&serverTimezone=UTC&useUnicode=true&characterEncoding=UTF-8&allowPublicKeyRetrieval=true #${url}
-    username: root   #${username}
-    password: Fth419516. #${password}
+    #driver-class-name: ${driver_class_name}
+    url: jdbc:mysql://localhost:3306/daliy?useSSL=false&serverTimezone=UTC&useUnicode=true&characterEncoding=UTF-8&allowPublicKeyRetrieval=true
+    #url: ${url}
+    username: root
+    #username: ${username}
+    password: Fth419516.
+    #password: ${password}
   jackson:
     default-property-inclusion: non_null # JSON处理时忽略非空字段
   data:

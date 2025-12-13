@@ -5,6 +5,7 @@ import com.fth.vo.CommentsVO;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -19,4 +20,10 @@ public interface CommentsMapper {
             "on c.user_id=u.id " +
             "where c.essay_id=#{essayId} order by c.create_time desc")
     List<CommentsVO> show(Integer essayId);
+
+    @Update("update comments set liked=liked+1 where id=#{id}")
+    void incryLikes(Integer id);
+
+    @Update("update comments set liked=liked-1 where id=#{id}")
+    void decryLikes(Integer id);
 }

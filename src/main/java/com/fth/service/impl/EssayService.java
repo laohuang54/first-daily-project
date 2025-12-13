@@ -54,12 +54,14 @@ public class EssayService implements IEssayService {
 
         // 1. 先执行Redis原子操作，根据返回值判断是点赞还是取消点赞（避免并发问题）
         Long isAddSuccess = stringRedisTemplate.opsForSet().add(key, userStr);
+        log.info("isAddSuccess: {}", isAddSuccess);
 
         if (isAddSuccess != null) {
             if (isAddSuccess>=1) {
                 // 2. add成功 → 首次点赞 → 数据库点赞数+1
-                log.info("点赞成功");
-                essayMapper.incryLikes(id);
+                log.info("点赞成功，liked+1");
+                Long l = essayMapper.incryLikes(id);
+                log.info("数据库点赞数+1，l: {}", l);
                 return Result.ok("点赞成功");
             } else {
                 // 3. add失败（元素已存在）→ 取消点赞 → 先移除Redis中的用户ID，再数据库点赞数-1

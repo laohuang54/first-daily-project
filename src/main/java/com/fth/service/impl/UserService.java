@@ -105,6 +105,7 @@ public class UserService implements IUserService {
 
     @Override
     public Result deleteUser(Integer id) {
+        log.info("删除用户id为{}",id);
         userMapper.deleteUser(id);
         return Result.ok("删除成功");
     }

@@ -12,6 +12,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 
 public class CommentsVO extends User {
+    private Integer liked;
+
     private String content;
 
     private LocalDateTime createTime;

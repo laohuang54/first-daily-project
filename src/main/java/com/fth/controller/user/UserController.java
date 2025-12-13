@@ -47,6 +47,15 @@ public class UserController {
     private ShopService shopService;
 
 
+    @PutMapping("/essaylike/{id}")
+    public Result likeEssay(@PathVariable Integer id) { // id:文章id
+        return essayService.likeEssay(id);
+    }
+
+    @PutMapping("/commentslike/{id}")
+    public Result likeComments(@PathVariable Integer id) { // id:评论id
+        return commentsService.likeComments(id);
+    }
 
     @PutMapping("/seckill") //用户抢购秒杀商品
     public Result seckill(Integer id){
@@ -88,8 +97,10 @@ public class UserController {
         return signService.showSign(time);
     }
 
-    @DeleteMapping("/deleteuser/{id}") //注销账号
-    public Result deleteUser(Integer id) {
+    @DeleteMapping("/deleteuser") //注销账号
+    public Result deleteUser() {
+        log.info("用户注销");
+        Integer id = UserHolder.getUserId();
         return userService.deleteUser(id);
     }
 
@@ -143,7 +154,7 @@ public class UserController {
         return Result.ok(singleEssay);
     }
 
-    @GetMapping("/allessay") //用户查看自己的所有文章
+    @GetMapping("/allessay") //用户查看所有文章
     public Result getAllEssay() {
         return essayService.getAllEssay();
     }
@@ -207,10 +218,7 @@ public class UserController {
     }
 
 
-    @PutMapping("/like/{id}")
-    public Result likeEssay(@PathVariable Integer id) { // id:文章id
-        return essayService.likeEssay(id);
-    }
+
 
 
     @PostMapping("/login")
