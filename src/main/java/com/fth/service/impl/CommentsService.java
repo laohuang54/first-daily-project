@@ -4,7 +4,9 @@ import cn.hutool.core.bean.BeanUtil;
 import com.fth.dto.CommentsDTO;
 import com.fth.dto.Result;
 import com.fth.mapper.CommentsMapper;
+import com.fth.mapper.EssayMapper;
 import com.fth.pojo.Comments;
+import com.fth.pojo.Essay;
 import com.fth.service.ICommentsService;
 import com.fth.utils.UserHolder;
 import com.fth.vo.CommentsVO;
@@ -23,6 +25,8 @@ public class CommentsService implements ICommentsService {
     @Autowired
     private CommentsMapper commentsMapper;
     @Autowired
+    private EssayMapper essayMapper;
+    @Autowired
     private StringRedisTemplate stringRedisTemplate;
 
     @Override
@@ -35,6 +39,8 @@ public class CommentsService implements ICommentsService {
         //保存评论
         commentsMapper.add(com);
         log.info("评论发布成功");
+        essayMapper.updateCommentNum(commentsDTO.getEssayId());
+        log.info("评论数加1");
         return Result.ok("评论发布成功");
     }
 

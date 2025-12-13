@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 import static com.fth.constant.KeysConstant.ESSAY_LIKES_KEY;
+import static com.fth.constant.KeysConstant.ESSAY_READ_KEY;
 
 @Service
 @Slf4j
@@ -86,7 +87,16 @@ public class EssayService implements IEssayService {
     }
 
     @Override
-    public Essay getSingleEssay(Integer id) {
+    public Essay getSingleEssay(Integer id) { //id:文章id
+        log.info("获取文章id为{}的文章",id);
+        String key=ESSAY_READ_KEY+id;
+        Integer userId=UserHolder.getUserId();
+        String userStr=userId.toString();
+        Long isRead=stringRedisTemplate.opsForSet().add(key,userStr); //查看用户是否已阅读
+        if (isRead!=null&&isRead>=1) {
+            log.info("浏览量加1");
+            essayMapper.updateView(id); // 更新浏览量
+        }
         return essayMapper.getSingleEssay(id);
     }
 }

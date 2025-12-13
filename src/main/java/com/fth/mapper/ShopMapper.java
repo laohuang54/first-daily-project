@@ -19,4 +19,7 @@ public interface ShopMapper {
     Shop getById(Integer id);
 
     int seckill(Shop shop);
+    //void update(Shop shop);
+    @Select("select * from shop")
+    Shop getInfo();
 }

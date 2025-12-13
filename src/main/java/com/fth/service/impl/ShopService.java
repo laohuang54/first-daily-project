@@ -2,6 +2,7 @@ package com.fth.service.impl;
 
 import com.fth.dto.Result;
 
+import com.fth.dto.ShopDTO;
 import com.fth.mapper.ShopMapper;
 import com.fth.pojo.Shop;
 import com.fth.service.IShopService;
@@ -9,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import static com.fth.constant.KeysConstant.SHOP_KEY;
 
 @Service
 public class ShopService implements IShopService {
@@ -60,6 +63,17 @@ public class ShopService implements IShopService {
         if(result==0)
             return Result.fail("购买失败");
         return Result.ok("购买成功");
+    }
+
+    @Override
+    public Result add(ShopDTO shopDTO, String imgUrl) {
+        return null;
+    }
+
+    @Override
+    public Result getInfo() {
+        Shop info = shopMapper.getInfo();
+        return Result.ok(info);
     }
 
 }

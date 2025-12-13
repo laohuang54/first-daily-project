@@ -12,4 +12,8 @@ public interface IShopService {
     Result sell(Integer id);
 
     Result seckill(Integer id);
+
+    Result add(ShopDTO shopDTO, String imgUrl);
+
+    Result getInfo();
 }

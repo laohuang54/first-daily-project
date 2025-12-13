@@ -2,6 +2,7 @@ package com.fth.controller.user;
 
 import com.fth.dto.*;
 import com.fth.pojo.Essay;
+import com.fth.pojo.Shop;
 import com.fth.pojo.User;
 import com.fth.properties.JwtProperty;
 import com.fth.service.IUserService;
@@ -42,19 +43,17 @@ public class UserController {
     private SignService signService;
     @Autowired
     private CommentsService commentsService;
-
     @Autowired
     private ShopService shopService;
 
+    @GetMapping("/shop/list") //条件查询
+    public Result getShopList(@RequestBody Shop shop){
 
-    @PutMapping("/essaylike/{id}")
-    public Result likeEssay(@PathVariable Integer id) { // id:文章id
-        return essayService.likeEssay(id);
     }
 
-    @PutMapping("/commentslike/{id}")
-    public Result likeComments(@PathVariable Integer id) { // id:评论id
-        return commentsService.likeComments(id);
+    @GetMapping("/shop/info")
+    public Result getShopInfo(){
+        return shopService.getInfo();
     }
 
     @PutMapping("/seckill") //用户抢购秒杀商品
@@ -66,6 +65,17 @@ public class UserController {
     public Result sell(Integer id){ //用户购买普通商品
         return shopService.sell(id);
     }
+
+    @PutMapping("/essaylike/{id}")
+    public Result likeEssay(@PathVariable Integer id) { // id:文章id
+        return essayService.likeEssay(id);
+    }
+
+    @PutMapping("/commentslike/{id}")
+    public Result likeComments(@PathVariable Integer id) { // id:评论id
+        return commentsService.likeComments(id);
+    }
+
 
     @GetMapping("/show") //展示商品
     public Result show(){

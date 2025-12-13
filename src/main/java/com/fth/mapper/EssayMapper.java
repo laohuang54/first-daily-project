@@ -37,4 +37,10 @@ public interface EssayMapper {
 
     @Select("select * from essay where id=#{id}")
     Essay getSingleEssay(Integer id);
+
+    @Update("update essay set `read`=`read`+1 where id=#{id}")
+    void updateView(Integer id);
+
+    @Update("update essay set `comments`=`comments`+1 where id=#{essayId}")
+    void updateCommentNum(Integer essayId);
 }

@@ -3,17 +3,16 @@ package com.fth.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ShopDTO {
+public class ShopInfoDTO {
     private String name;
 
     private Integer price;
 
-    private Integer stock;
-
-    private MultipartFile img; //商品图片
+    private List<Integer> category_id; // 商品分类
 }

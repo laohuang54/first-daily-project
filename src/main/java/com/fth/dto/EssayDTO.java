@@ -10,6 +10,8 @@ import org.springframework.web.multipart.MultipartFile;
 @NoArgsConstructor
 public class EssayDTO {
     private String title;
+
     private String content;
+
     private MultipartFile img;
 }

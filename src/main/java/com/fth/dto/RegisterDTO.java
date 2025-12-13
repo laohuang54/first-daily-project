@@ -10,7 +10,10 @@ import org.springframework.web.multipart.MultipartFile;
 @NoArgsConstructor
 public class RegisterDTO {
     private String username;
+
     private String password;
+
     private Integer sex;
+
     private MultipartFile avatar;
 }
