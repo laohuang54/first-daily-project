@@ -7,7 +7,7 @@
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <!-- 必填字段：username、password -->
             <if test="username != null and username != ''">username,</if>
-            <if test="password != null and password != ''">password,</if>
+            <if test="password != null and password != ''">`password`,</if>
             <!-- 可选字段：avatar（非空则插入） -->
             <if test="avatar != null and avatar != ''">avatar,</if>
             <!-- 可选字段：sex（允许为null，传null也插入） -->

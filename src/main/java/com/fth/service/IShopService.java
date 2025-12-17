@@ -23,4 +23,6 @@ public interface IShopService {
     Result delete(Integer id);
 
     Result ban(Integer id);
+
+    Result getShopDetail(Integer id);
 }

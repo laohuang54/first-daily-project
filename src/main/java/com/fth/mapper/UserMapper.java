@@ -34,4 +34,7 @@ public interface UserMapper{
 
     @Select("select * from category")
     List<Category> getCategoryInfo();
+
+    @Update("update user set score = score - #{price} where id = #{id}")
+    void updateScore(Integer id, Integer price);
 }

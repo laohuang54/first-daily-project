@@ -20,6 +20,7 @@ public class UserInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         log.info("用户拦截器执行");
         String token = request.getHeader("token");
+        log.info("用户Token:{}",token);
         if (token == null || token.equals("")) {
             log.info("token为空");
             response.getWriter().write("请先登录");

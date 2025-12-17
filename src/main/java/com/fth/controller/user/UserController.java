@@ -51,13 +51,18 @@ public class UserController {
         return userService.getCategoryInfo();
     }
 
+    @GetMapping("/shop/detail/{id}")
+    public Result getShopDetail(@PathVariable Integer id){
+        return shopService.getShopDetail(id);
+    }
+
     @GetMapping("/shop/list") //条件查询
     public Result getShopList(ShopInfoDTO shop){
         return shopService.getShopList(shop);
     }
 
     @GetMapping("/shop/info")
-    public Result getShopInfo(){
+    public Result getShopInfo(){ //用户查询所有商品
         return shopService.getInfo();
     }
 
