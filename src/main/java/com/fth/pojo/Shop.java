@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 public class Shop {
     private Integer id;
 
-    private String name;
+    private String shop_name;
 
     private LocalDateTime create_time; //上架时间
 

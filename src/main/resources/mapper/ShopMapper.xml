@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.fth.mapper.ShopMapper">
+    <insert id="add">
+        insert into shop (shop_name, price, stock,description, img)
+        values (#{shopDTO.name}, #{shopDTO.price}, #{shopDTO.stock},#{shopDTO.description}, #{imgUrl})
+    </insert>
 
     <update id="update" parameterType="com.fth.pojo.Shop">
         update shop
         <set>
-            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="name != null and name != ''">shop_name = #{name},</if>
             <if test="price != null and price != ''">price = #{price},</if>
             <if test="description != null and description != ''">description = #{description},</if>
             <if test="img != null and img != ''">img = #{img},</if>
@@ -20,4 +24,45 @@
     <update id="seckill">
         update shop set stock = stock - 1,version=version+1 where id = #{id} and stock > 0 and status = 1 and version= #{version}
     </update>
+    <select id="getShopList" resultType="com.fth.pojo.Shop">
+        <!-- 1. 只查Shop实体的列 + 加表别名，解决only_full_group_by -->
+        select
+        s.id, s.shop_name, s.description, s.create_time,
+        s.status, s.stock, s.img, s.price
+        from shop s
+        inner join shop_category sc on s.id = sc.shop_id
+        left join category c on c.id = sc.category_id
+        <where>
+            <!-- 2. 所有条件开头加and（where标签自动处理多余and），参数加param.前缀 -->
+            <if test="param.shop_name != null and param.shop_name != ''">
+                and s.shop_name like concat('%', #{param.shop_name}, '%')
+            </if>
+            <!-- 3. 数值类型仅判断!=null，无需!= ''，参数加param.前缀 -->
+            <if test="param.price != null">
+                and s.price &lt;= #{param.price}
+            </if>
+            <if test="param.stock != null">
+                and s.stock &gt;= #{param.stock}
+            </if>
+            <if test="param.start != null">
+                and s.create_time &gt;= #{param.start}
+            </if>
+            <if test="param.end != null">
+                and s.create_time &lt;= #{param.end}
+            </if>
+            <!-- 4. List判断改用isEmpty()更规范，参数加param.前缀 -->
+            <if test="param.categoryIds != null and not param.categoryIds.isEmpty()">
+                and sc.category_id in
+                <foreach collection="param.categoryIds" item="cid" open="(" separator="," close=")">
+                    #{cid} <!-- foreach的item无需加前缀 -->
+                </foreach>
+            </if>
+        </where>
+        <!-- 5. 按shop主键分组，符合only_full_group_by规则 -->
+        group by s.id
+        <!-- 6. having子句：List判断加param.前缀，size()用OGNL表达式而非直接传值 -->
+        <if test="param.categoryIds != null and not param.categoryIds.isEmpty()">
+            having count(distinct sc.category_id) = ${param.categoryIds.size()}
+        </if>
+    </select>
 </mapper>

@@ -42,6 +42,25 @@ public class AdminController {
     @Autowired
     private ShopService shopService;
 
+    @GetMapping("/shop")
+    public Result shop(){
+        log.info("查询所有商品");
+        return shopService.getInfo();
+    }
+
+
+    @PutMapping("/shop/ban/{id}")
+    public Result ban(@PathVariable("id") Integer id){
+        log.info("禁用/解禁商品");
+        return shopService.ban(id);
+    }
+
+    @DeleteMapping("/shop/delete/{id}")
+    public Result delete(@PathVariable("id") Integer id){
+        log.info("删除商品");
+        return shopService.delete(id);
+    }
+
     @PostMapping("/shop/add")
     public Result add(@ModelAttribute ShopDTO shopDTO){
         log.info("新增商品:{}",shopDTO);
@@ -99,10 +118,16 @@ public Result deleteEssayAdmin(@PathVariable Integer id) {
     return Result.ok();
 }
 
+/**
+ * 管理员登录接口
+ * @param loginDTO 登录数据传输对象，包含用户名和密码等信息
+ * @return 返回一个Result对象，包含登录成功后的管理员信息和生成的JWT令牌
+ */
 @PostMapping("/login")
 public Result login(@RequestBody LoginDTO loginDTO){
     log.info("管理员登录：{}",loginDTO);
     Admin login = adminService.login(loginDTO);
+    // 调用服务层方法进行登录验证
     //令牌
     Map<String,Object> claims=new HashMap<>();
     claims.put(ADMIN_ID,login.getId());
@@ -139,13 +164,14 @@ public Result getUser(@PathVariable Integer id){  // 使用@PathVariable注解�
 /**
  * 禁用用户接口
  * 通过用户ID禁用指定用户
- *
- * @param banDTO 包含被禁用用户ID的DTO对象
- * @return 返回操作结果，成功时返回ok状态
- */
-@PutMapping("/users/ban")  // 定义HTTP PUT请求映射，路径为/users/ban
+ * 该接口需要管理员权限才能调用
 
-public Result banUser(@RequestBody BanDTO banDTO){  // 方法：banUser，接收BanDTO类型参数
+ *
+ * @param banDTO 包含被禁用用户ID的DTO对象，用于接收前端传递的禁用用户信息
+ * @return 返回操作结果，成功时返回ok状态，包含操作成功的信息
+ */
+@PutMapping("/users/ban")  // 定义HTTP PUT请求映射，路径为/users/ban，用于处理禁用用户的请求
+public Result banUser(@RequestBody BanDTO banDTO){  // 方法：banUser，接收BanDTO类型参数，参数通过请求体传递
     adminService.banUser(banDTO);  // 调用adminService的banUser方法执行禁用操作
     return Result.ok();  // 返回操作成功的结果
 }

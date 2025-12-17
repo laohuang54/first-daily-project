@@ -2,6 +2,7 @@ package com.fth.service;
 
 import com.fth.dto.Result;
 import com.fth.dto.ShopDTO;
+import com.fth.dto.ShopInfoDTO;
 import com.fth.pojo.Shop;
 
 public interface IShopService {
@@ -16,4 +17,10 @@ public interface IShopService {
     Result add(ShopDTO shopDTO, String imgUrl);
 
     Result getInfo();
+
+    Result getShopList(ShopInfoDTO shop);
+
+    Result delete(Integer id);
+
+    Result ban(Integer id);
 }

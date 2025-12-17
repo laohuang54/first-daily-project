@@ -32,7 +32,9 @@ public interface EssayMapper {
     @Update("update essay set liked=liked-1 where id=#{id}")
     Long decryLikes(Integer id);
 
-    @Select("select e.*,u.username,u.avatar from essay e left join user u on e.user_id=u.id order by e.create_time desc")
+    @Select("select e.*,u.username,u.avatar from essay e " +
+            "left join user u on e.user_id=u.id " +
+            "order by e.create_time desc")
     List<EssayVO> getAllessay();
 
     @Select("select * from essay where id=#{id}")

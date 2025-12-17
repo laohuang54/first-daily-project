@@ -109,4 +109,10 @@ public class UserService implements IUserService {
         userMapper.deleteUser(id);
         return Result.ok("删除成功");
     }
+
+    @Override
+    public Result getCategoryInfo() {
+        log.info("获取分类信息");
+        return Result.ok(userMapper.getCategoryInfo());
+    }
 }

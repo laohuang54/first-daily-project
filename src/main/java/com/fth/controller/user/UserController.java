@@ -46,9 +46,14 @@ public class UserController {
     @Autowired
     private ShopService shopService;
 
-    @GetMapping("/shop/list") //条件查询
-    public Result getShopList(@RequestBody Shop shop){
+    @GetMapping("/category/info")
+    public Result getCategoryInfo(){
+        return userService.getCategoryInfo();
+    }
 
+    @GetMapping("/shop/list") //条件查询
+    public Result getShopList(ShopInfoDTO shop){
+        return shopService.getShopList(shop);
     }
 
     @GetMapping("/shop/info")
@@ -76,13 +81,6 @@ public class UserController {
         return commentsService.likeComments(id);
     }
 
-
-    @GetMapping("/show") //展示商品
-    public Result show(){
-        //TODO 展示商品
-        shopService.show();
-        return Result.ok();
-    }
 
     @GetMapping("/comments/show/{essay_id}")
     public Result showComments(@PathVariable Integer essay_id){

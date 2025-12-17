@@ -2,11 +2,14 @@ package com.fth.mapper;
 
 
 import com.fth.dto.LoginDTO;
+import com.fth.pojo.Category;
 import com.fth.pojo.User;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
+
+import java.util.List;
 
 @Mapper
 public interface UserMapper{
@@ -28,4 +31,7 @@ public interface UserMapper{
     void deleteUser(Integer id);
     @Update("update user set score = score + #{signScore} where id = #{userId}")
     void updatescore(Integer userId, Integer signScore);
+
+    @Select("select * from category")
+    List<Category> getCategoryInfo();
 }

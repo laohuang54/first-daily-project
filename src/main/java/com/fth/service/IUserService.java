@@ -24,4 +24,6 @@ public interface IUserService {
     Result updatePassword(String password, String newPassword);
 
     Result deleteUser(Integer id);
+
+    Result getCategoryInfo();
 }

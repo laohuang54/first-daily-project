@@ -6,6 +6,7 @@ import com.aliyun.oss.common.comm.SignVersion;
 import com.aliyun.oss.model.CannedAccessControlList;
 import com.aliyun.oss.model.PutObjectRequest;
 import com.aliyun.oss.model.PutObjectResult;
+import io.netty.channel.Channel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,7 +18,6 @@ public String upload(byte[] bytes, String objectName) {
     String bucketName="dailyproject";
     String accessKeyId=System.getenv("OSS_ACCESS_KEY_ID");
     String accessKeySecret=System.getenv("OSS_ACCESS_KEY_SECRET");
-
     // 创建OSSClient实例。
     OSS ossClient = new OSSClientBuilder().build(endpoint, accessKeyId, accessKeySecret);
     try {

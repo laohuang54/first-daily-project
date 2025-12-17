@@ -46,6 +46,8 @@ mybatis:
   configuration:
     #开启驼峰命名
     map-underscore-to-camel-case: true
+    cache-enabled: false  # 核心：禁用缓存，避免生成缓存 Key 时反射 List 报错
+    local-cache-scope: statement  # 设置为 statement 级别
 logging:
   level:
     com.fth: debug

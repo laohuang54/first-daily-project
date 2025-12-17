@@ -101,12 +101,12 @@
             <version>3.17.4</version>
         </dependency>
 
-        <!-- PageHelper 核心依赖 -->
-        <dependency>
-            <groupId>com.github.pagehelper</groupId>
-            <artifactId>pagehelper-spring-boot-starter</artifactId>
-            <version>1.4.7</version> <!-- 最新版可去 Maven 仓库查询 -->
-        </dependency>
+<!--        &lt;!&ndash; PageHelper 核心依赖 &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>com.github.pagehelper</groupId>-->
+<!--            <artifactId>pagehelper-spring-boot-starter</artifactId>-->
+<!--            <version>1.4.7</version> &lt;!&ndash; 最新版可去 Maven 仓库查询 &ndash;&gt;-->
+<!--        </dependency>-->
 
         <!-- Hutool 工具包 -->
         <dependency>
