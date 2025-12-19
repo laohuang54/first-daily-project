@@ -1,0 +1,10 @@
+
+driver_class_name: com.mysql.cj.jdbc.Driver
+url: jdbc:mysql://localhost:3306/daliy?useSSL=false&serverTimezone=UTC&useUnicode=true&characterEncoding=UTF-8
+username: root
+password: Fth419516.
+
+redis_host: localhost
+redis_port: 6379
+#redis_password: 419516
+redis_database: 0
