@@ -1,5 +1,9 @@
 server:
   port: 8081
+  tomcat:
+    max-threads: 1000       # 根据机器 CPU 和内存调整
+    accept-count: 500       # 等待队列
+    max-connections: 8192   # 保持默认即可
   servlet:
     encoding:
       charset: UTF-8

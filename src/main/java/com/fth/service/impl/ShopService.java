@@ -10,18 +10,21 @@ import com.fth.mapper.UserMapper;
 import com.fth.pojo.Shop;
 import com.fth.pojo.User;
 import com.fth.service.IShopService;
-import com.fth.utils.UserHolder;
+import com.fth.utils.RedisData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.fth.constant.KeysConstant.*;
-import static java.awt.SystemColor.info;
+import static com.fth.constant.RedisConstant.EXPIRE_TIME;
 
 @Slf4j
 @Service
@@ -34,6 +37,105 @@ public class ShopService implements IShopService {
     private StringRedisTemplate stringRedisTemplate;
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    @Qualifier("cacheBuilderThreadPool")
+    private ExecutorService cacheBuilderThreadPool;
+
+    private static final AtomicInteger RIP_COUNT = new AtomicInteger(0);
+
+    private static final AtomicInteger COUNT = new AtomicInteger(0);
+
+    private static AtomicInteger LOGIC_COUNT = new AtomicInteger(0);
+
+    private static final String LOCK_KEY="shop:lock:";
+
+    private static final Shop EMPTY_SHOP=new Shop();
+    static {
+        EMPTY_SHOP.setId(-1);
+        EMPTY_SHOP.setShop_name("暂无商品");
+    }
+
+    @Override
+    public Result getShopDetail(Integer id) {
+        log.info("用户查询商品详情:"+id);
+        String key=DETAILED_SHOP_KEY+id; //储存
+        String lockKey=LOCK_KEY+id;//互斥锁
+        String jshop = stringRedisTemplate.opsForValue().get(key);
+        RedisData data = JSONUtil.toBean(jshop, RedisData.class);
+        //缓存存在
+        if (data!=null){
+            //过期了
+            if(System.currentTimeMillis()>data.getExpireTime()){
+                return LogicExpireTimeSolve(id, key, lockKey, data,true);
+            }
+            //没过期--直接返回
+            return Result.ok(data.getData());
+        }
+        //缓存不存在
+        return LogicExpireTimeSolve(id, key, lockKey, data,false);
+    }
+
+    private Result LogicExpireTimeSolve(Integer id, String key, String lockKey, RedisData data,Boolean isCacheExist) {
+
+        log.info("逻辑过期调用次数:{}",LOGIC_COUNT.getAndIncrement());
+        Boolean tryLock=stringRedisTemplate.opsForValue().setIfAbsent(lockKey,"1",10, TimeUnit.SECONDS);
+        if (Boolean.TRUE.equals(tryLock)){
+            CacheBuild(key,lockKey, id);
+            return Result.ok(data.getData());
+    }else {
+            //没拿到锁--返回旧数据
+            log.info("没拿到锁次数:{}",COUNT.getAndIncrement());
+            if (isCacheExist){
+                return Result.ok(data.getData());
+            }else {
+                log.info("特殊情况：第一次查询触发缓存击穿");
+                // 重新查询（此时缓存很可能已被重建）
+                String jshop = stringRedisTemplate.opsForValue().get(key);
+                RedisData newData = JSONUtil.toBean(jshop, RedisData.class);
+                if (newData != null) {
+                    return Result.ok(newData.getData());
+                } else {
+                    // 重试后仍无缓存 → 返回空对象（防穿透兜底）
+                    return Result.ok(EMPTY_SHOP);
+                }
+            }
+        }
+    }
+
+    private void CacheBuild(String key, String lockKey,Integer id){
+        cacheBuilderThreadPool.submit(()->{
+
+            try {
+                //拿到锁--查数据库--重建缓存--释放锁
+                log.info("缓存击穿--拿到锁--打到数据库");
+                RedisData redisData = new RedisData();
+                Shop shop = shopMapper.getById(id);
+                if (shop==null){
+                    CacheRip(key);//缓存穿透
+                    return;
+                }
+
+
+                redisData.setData(shop);
+                redisData.setExpireTime(System.currentTimeMillis()+EXPIRE_TIME);
+                log.info("新的逻辑过期时间：{}",System.currentTimeMillis()+EXPIRE_TIME);
+                String json= JSONUtil.toJsonStr(redisData);
+                stringRedisTemplate.opsForValue().set(key,json,2*EXPIRE_TIME,TimeUnit.MILLISECONDS);
+            } finally {
+                stringRedisTemplate.delete(lockKey);
+            }
+
+        });
+    }
+
+    private void CacheRip(String key){ //缓存穿透解决
+        log.info("缓存穿透触发次数：{}",RIP_COUNT.getAndIncrement());
+        String json=JSONUtil.toJsonStr(EMPTY_SHOP);
+        stringRedisTemplate.opsForValue().set(key,json,5, TimeUnit.MINUTES);
+    }
+
+
+
 
     @Override
     public Shop show() {
@@ -142,23 +244,4 @@ public class ShopService implements IShopService {
         }
     }
 
-    @Override
-    public Result getShopDetail(Integer id) {
-        String key=DETAILED_SHOP_KEY+id;
-        String jshop = stringRedisTemplate.opsForValue().get(key);
-        if(jshop!=null){
-            Shop shop=JSONUtil.toBean(jshop,Shop.class);
-            return Result.ok(shop);
-        }
-        Shop shop = shopMapper.getById(id);
-        //缓存穿透解决--缓存空值
-        //应用场景：查询详细商品时
-        if(shop==null){
-            stringRedisTemplate.opsForValue().set(key,"缓存穿透给我滚呐!!!",1, TimeUnit.MINUTES);
-            return Result.fail("商品不存在");
-        }
-        String json= JSONUtil.toJsonStr(shop);
-        stringRedisTemplate.opsForValue().set(key,json,1,TimeUnit.HOURS);
-        return Result.ok(shop);
-    }
 }
