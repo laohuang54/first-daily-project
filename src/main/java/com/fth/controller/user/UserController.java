@@ -1,6 +1,7 @@
 package com.fth.controller.user;
 
 import com.fth.dto.*;
+import com.fth.pojo.ChatMessage;
 import com.fth.pojo.Essay;
 import com.fth.pojo.Shop;
 import com.fth.pojo.User;
@@ -14,11 +15,15 @@ import com.fth.vo.UserVO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Delete;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 import java.io.IOException;
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -45,6 +50,22 @@ public class UserController {
     private CommentsService commentsService;
     @Autowired
     private ShopService shopService;
+    @Autowired
+    private SimpMessagingTemplate simpMessagingTemplate;
+
+    @MessageMapping("/private-message") // 前端发到 /app/private-message
+    public void handlePrivateMessage(
+            @Payload ChatMessage message,
+            Principal principal) throws Exception {
+
+        String sender = principal.getName();
+        String receiver = message.getTo();
+
+        // 1. 保存消息到数据库（略）
+        // 2. 推送给接收者：/queue/messages/{receiver}
+        simpMessagingTemplate.convertAndSendToUser(
+                receiver, "/queue/messages", message);
+    }
 
     @GetMapping("/category/info")
     public Result getCategoryInfo(){

@@ -25,6 +25,7 @@ public class Comments {
     /**
      * 关联的1级评论id，如果是一级评论，则值为0
      */
+
     private Long parentId;
 
     private Integer answerId;
