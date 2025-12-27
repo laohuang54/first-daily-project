@@ -8,11 +8,25 @@
         <version>3.5.8</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
+
+    <!-- 父模块基本信息 -->
     <groupId>com</groupId>
-    <artifactId>fth</artifactId>
+    <artifactId>fth-parent</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>fth</name>
-    <description>fth</description>
+    <name>fth-parent</name>
+    <description>父模块：聚合子模块 + 统一版本管理</description>
+    <!-- 父模块必须是 pom 类型 -->
+    <packaging>pom</packaging>
+
+    <properties>
+        <java.version>17</java.version>
+        <!-- 自定义依赖版本 -->
+        <mybatis.version>3.0.5</mybatis.version>
+        <jjwt.version>0.11.5</jjwt.version>
+        <aliyun.oss.version>3.17.4</aliyun.oss.version>
+        <hutool.version>5.8.26</hutool.version>
+    </properties>
+
     <url/>
     <licenses>
         <license/>
@@ -26,9 +40,7 @@
         <tag/>
         <url/>
     </scm>
-    <properties>
-        <java.version>17</java.version>
-    </properties>
+
     <dependencies>
         <!-- 新增操作 Redis 的依赖 -->
         <dependency>
