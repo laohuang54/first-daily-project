@@ -15,6 +15,12 @@
         <module name="fth" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="fth-common" target="17" />
+      <module name="fth-essay-service" target="17" />
+      <module name="fth-shop-service" target="17" />
+      <module name="fth-user-service" target="17" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
